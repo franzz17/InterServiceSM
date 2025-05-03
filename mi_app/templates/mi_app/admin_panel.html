@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterServicesSM - Panel de Administración</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --primary-dark: #3367d6;
+            --secondary-color: #34a853;
+            --accent-color: #ea4335;
+            --warning-color: #fbbc05;
+            --light-bg: #f8f9fa;
+            --text-color: #202124;
+            --light-text: #5f6368;
+            --border-color: #dadce0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+        
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .admin-badge {
+            font-size: 12px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(66, 133, 244, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .nav-links a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .admin-logout {
+            color: var(--accent-color);
+            font-weight: 500;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .admin-logout:hover {
+            background-color: rgba(234, 67, 53, 0.1);
+        }
+        
+        .main-content {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .page-title {
+            margin-bottom: 30px;
+            color: var(--text-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+        }
+        
+        .status-pending {
+            background-color: var(--warning-color);
+        }
+        
+        .status-approved {
+            background-color: var(--primary-color);
+        }
+        
+        .status-completed {
+            background-color: var(--secondary-color);
+        }
+        
+        .status-rejected {
+            background-color: var(--accent-color);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .data-table th {
+            text-align: left;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-table tr:hover {
+            background-color: rgba(66, 133, 244, 0.05);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .btn-success {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #2d9549;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        
+        .btn-danger {
+            background-color: var(--accent-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #d62516;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .form-check input[type="checkbox"] {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .client-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-group {
+            margin-bottom: 15px;
+        }
+        
+        .info-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--light-text);
+            margin-bottom: 3px;
+        }
+        
+        .info-group .value {
+            font-weight: 500;
+        }
+        
+        .modal-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .images-preview {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .image-container {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+        }
+        
+        .image-container h4 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--light-text);
+        }
+        
+        .empty-table {
+            padding: 40px;
+            text-align: center;
+            color: var(--light-text);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .pagination a {
+            background-color: white;
+            transition: background-color 0.3s;
+        }
+        
+        .pagination a:hover {
+            background-color: rgba(66, 133, 244, 0.1);
+        }
+        
+        .pagination .current {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .client-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .images-preview {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                gap: 5px;
+            }
+            
+            .nav-links a {
+                padding: 8px;
+                font-size: 14px;
+            }
+            
+            .logo {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">InterServicesSM <span class="admin-badge">Admin</span></a>
+            <nav class="nav-links">
+                <a href="{% url 'admin_panel' %}" class="{% if status == 'pendiente' %}active{% endif %}">Pendientes</a>
+                <a href="{% url 'admin_panel_aprobadas' %}" class="{% if status == 'aprobada' %}active{% endif %}">Aprobadas</a>
+                <a href="{% url 'admin_panel_completadas' %}" class="{% if status == 'completada' %}active{% endif %}">Completadas</a>
+                <a href="{% url 'logout' %}" class="admin-logout">Cerrar Sesión</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="page-title">
+            <h1>
+                {% if status == 'pendiente' %}
+                Solicitudes Pendientes
+                {% elif status == 'aprobada' %}
+                Solicitudes Aprobadas
+                {% elif status == 'completada' %}
+                Solicitudes Completadas
+                {% endif %}
+            </h1>
+        </div>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if solicitudes %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Cédula</th>
+                        <th>Plan</th>
+                        <th>Fecha Registro</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solicitud in solicitudes %}
+                    <tr>
+                        <td>{{ solicitud.id_usuario }}</td>
+                        <td>{{ solicitud.nombre }} {{ solicitud.apellido }}</td>
+                        <td>{{ solicitud.cedula }}</td>
+                        <td>{{ solicitud.plan_seleccionado }}</td>
+                        <td>{{ solicitud.fecha_registro|date:"d/m/Y" }}</td>
+                        <td>
+                            <span class="status-indicator {% if solicitud.estado == 'Pendiente' %}status-pending{% elif solicitud.estado == 'Aprobada' %}status-approved{% elif solicitud.estado == 'Completada' %}status-completed{% elif solicitud.estado == 'Rechazada' %}status-rejected{% endif %}">
+                                {{ solicitud.estado }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm" onclick="openModal('detailModal{{ solicitud.id_usuario }}')">Ver Detalles</button>
+                                
+                                {% if status == 'pendiente' %}
+                                <button class="btn btn-sm btn-success" onclick="openModal('approveModal{{ solicitud.id_usuario }}')">Aprobar</button>
+                                <button class="btn btn-sm btn-danger" onclick="openModal('rejectModal{{ solicitud.id_usuario }}')">Rechazar</button>
+                                {% elif status == 'aprobada' %}
+                                <button class="btn btn-sm btn-success" onclick="openModal('completeModal{{ solicitud.id_usuario }}')">Completar</button>
+                                <button class="btn btn-sm btn-danger" onclick="openModal('rejectModal{{ solicitud.id_usuario }}')">Rechazar</button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-table">
+                <p>No hay solicitudes {% if status == 'pendiente' %}pendientes{% elif status == 'aprobada' %}aprobadas{% elif status == 'completada' %}completadas{% endif %} en este momento.</p>
+            </div>
+        {% endif %}
+
+        {% if solicitudes.has_other_pages %}
+        <div class="pagination">
+            {% if solicitudes.has_previous %}
+                <a href="?page={{ solicitudes.previous_page_number }}">&laquo;</a>
+            {% endif %}
+            
+            {% for i in solicitudes.paginator.page_range %}
+                {% if solicitudes.number == i %}
+                    <span class="current">{{ i }}</span>
+                {% else %}
+                    <a href="?page={{ i }}">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if solicitudes.has_next %}
+                <a href="?page={{ solicitudes.next_page_number }}">&raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </main>
+
+    {% for solicitud in solicitudes %}
+    <!-- Modal de Detalles -->
+    <div class="modal" id="detailModal{{ solicitud.id_usuario }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalles de la Solicitud #{{ solicitud.id_usuario }}</h2>
+                <button class="close-modal" onclick="closeModal('detailModal{{ solicitud.id_usuario }}')">&times;</button>
+            </div>
+            <div class="client-info">
+                <div class="info-group">
+                    <label>Nombre Completo</label>
+                    <div class="value">{{ solicitud.nombre }} {{ solicitud.apellido }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Cédula</label>
+                    <div class="value">{{ solicitud.cedula }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Correo Electrónico</label>
+                    <div class="value">{{ solicitud.correo }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Teléfono</label>
+                    <div class="value">{{ solicitud.telefono }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Dirección</label>
+                    <div class="value">{{ solicitud.direccion }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Barrio</label>
+                    <div class="value">{{ solicitud.barrio }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Plan Seleccionado</label>
+                    <div class="value">{{ solicitud.plan_seleccionado }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Horario Preferido</label>
+                    <div class="value">{{ solicitud.preferencia_horario }}</div>
+                </div>
+                {% if solicitud.instalador %}
+                <div class="info-group">
+                    <label>Instalador Asignado</label>
+                    <div class="value">{{ solicitud.instalador }}</div>
+                </div>
+                {% endif %}
+                {% if solicitud.fecha_instalacion %}
+                <div class="info-group">
+                    <label>Fecha de Instalación</label>
+                    <div class="value">{{ solicitud.fecha_instalacion|date:"d/m/Y" }}</div>
+                </div>
+                {% endif %}
+                <div class="info-group">
+                    <label>Estado</label>
+                    <div class="value">{{ solicitud.estado }}</div>
+                </div>
+                <div class="info-group">
+                    <label>Fecha de Solicitud</label>
+                    <div class="value">{{ solicitud.fecha_registro|date:"d/m/Y" }}</div>
+                </div>
+            </div>
+            
+            <div class="images-preview">
+                <div class="image-container">
+                    <h4>Foto de Cédula</h4>
+                    <img src="{{ solicitud.url_cedula }}" alt="Cédula" onclick="window.open('{{ solicitud.url_cedula }}', '_blank')">
+                </div>
+                <div class="image-container">
+                    <h4>Recibo Público</h4>
+                    <img src="{{ solicitud.url_recibo }}" alt="Recibo Público" onclick="window.open('{{ solicitud.url_recibo }}', '_blank')">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if status == 'pendiente' %}
+    <!-- Modal de Aprobación -->
+    <div class="modal" id="approveModal{{ solicitud.id_usuario }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Aprobar Solicitud #{{ solicitud.id_usuario }}</h2>
+                <button class="close-modal" onclick="closeModal('approveModal{{ solicitud.id_usuario }}')">&times;</button>
+            </div>
+            <form method="post" action="{% url 'aprobar_solicitud' solicitud.id_usuario %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="instalador{{ solicitud.id_usuario }}">Asignar Instalador</label>
+                    <select name="instalador" id="instalador{{ solicitud.id_usuario }}" required>
+                        <option value="" disabled selected>Seleccione un instalador</option>
+                        <option value="Juan Pérez">Juan Pérez</option>
+                        <option value="María Gómez">María Gómez</option>
+                        <option value="Carlos Rodríguez">Carlos Rodríguez</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fecha_instalacion{{ solicitud.id_usuario }}">Fecha de Instalación</label>
+                    <input type="date" name="fecha_instalacion" id="fecha_instalacion{{ solicitud.id_usuario }}" required>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="imagenes_correctas" id="imagenes_correctas{{ solicitud.id_usuario }}">
+                    <label for="imagenes_correctas{{ solicitud.id_usuario }}">Imágenes correctas</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="closeModal('approveModal{{ solicitud.id_usuario }}')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Aprobar Solicitud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de Rechazo -->
+    <div class="modal" id="rejectModal{{ solicitud.id_usuario }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Rechazar Solicitud #{{ solicitud.id_usuario }}</h2>
+                <button class="close-modal" onclick="closeModal('rejectModal{{ solicitud.id_usuario }}')">&times;</button>
+            </div>
+            <form method="post" action="{% url 'rechazar_solicitud' solicitud.id_usuario %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="motivo_rechazo{{ solicitud.id_usuario }}">Motivo del Rechazo</label>
+                    <textarea name="motivo_rechazo" id="motivo_rechazo{{ solicitud.id_usuario }}" rows="4" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="closeModal('rejectModal{{ solicitud.id_usuario }}')">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Rechazar Solicitud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% elif status == 'aprobada' %}
+    <!-- Modal de Completar -->
+    <div class="modal" id="completeModal{{ solicitud.id_usuario }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Completar Solicitud #{{ solicitud.id_usuario }}</h2>
+                <button class="close-modal" onclick="closeModal('completeModal{{ solicitud.id_usuario }}')">&times;</button>
+            </div>
+            <form method="post" action="{% url 'completar_solicitud' solicitud.id_usuario %}">
+                {% csrf_token %}
+                <div class="client-info">
+                    <div class="info-group">
+                        <label>Instalador Asignado</label>
+                        <div class="value">{{ solicitud.instalador }}</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Fecha de Instalación</label>
+                        <div class="value">{{ solicitud.fecha_instalacion|date:"d/m/Y" }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notas_instalacion{{ solicitud.id_usuario }}">Notas de Instalación (opcional)</label>
+                    <textarea name="notas_instalacion" id="notas_instalacion{{ solicitud.id_usuario }}" rows="4"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="closeModal('completeModal{{ solicitud.id_usuario }}')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Marcar como Completada</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de Rechazo (para solicitudes aprobadas) -->
+    <div class="modal" id="rejectModal{{ solicitud.id_usuario }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Rechazar Solicitud #{{ solicitud.id_usuario }}</h2>
+                <button class="close-modal" onclick="closeModal('rejectModal{{ solicitud.id_usuario }}')">&times;</button>
+            </div>
+            <form method="post" action="{% url 'rechazar_solicitud' solicitud.id_usuario %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="motivo_rechazo{{ solicitud.id_usuario }}">Motivo del Rechazo</label>
+                    <textarea name="motivo_rechazo" id="motivo_rechazo{{ solicitud.id_usuario }}" rows="4" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="closeModal('rejectModal{{ solicitud.id_usuario }}')">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Rechazar Solicitud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Cerrar modal cuando se hace clic fuera del contenido
+        document.addEventListener('click', function(event) {
+            const modals = document.querySelectorAll('.modal.active');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
