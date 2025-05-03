@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --primary-dark: #3367d6;
+            --error-color: #ea4335;
+            --success-color: #34a853;
+            --border-color: #dadce0;
+            --text-color: #202124;
+            --light-bg: #f8f9fa;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h1 {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: #5f6368;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #202124;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+            background-color: white;
+            appearance: auto;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+        
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        
+        /* Estilo para campos obligatorios */
+        .required::after {
+            content: "*";
+            color: var(--error-color);
+            margin-left: 4px;
+        }
+        
+        /* Estilo para resaltar campos inválidos */
+        input:invalid,
+        select:invalid,
+        input[type="file"]:invalid {
+            border-color: var(--error-color);
+        }
+        
+        /* Estilo específico para el selector */
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23464646' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 40px;
+        }
+        
+        .errorlist {
+            color: var(--error-color);
+            list-style-type: none;
+            padding: 0;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 0;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 30px auto 0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .messages {
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .success {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(52, 168, 83, 0.2);
+        }
+        
+        .error {
+            background-color: rgba(234, 67, 53, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(234, 67, 53, 0.2);
+        }
+        
+        .file-group {
+            border: 1px dashed var(--border-color);
+            padding: 20px;
+            border-radius: 4px;
+            background-color: var(--light-bg);
+            text-align: center;
+        }
+        
+        .file-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #5f6368;
+        }
+
+        /* Estilo para opciones de plan */
+        .plan-options {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .plan-card {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            flex: 1;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .plan-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .plan-card.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(66, 133, 244, 0.05);
+        }
+
+        .plan-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .plan-card p {
+            color: #5f6368;
+            margin-bottom: 15px;
+        }
+
+        .plan-card .price {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--text-color);
+        }
+
+        .radio-hidden {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .plan-check {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+        }
+
+        .plan-card.selected .plan-check {
+            border-color: var(--primary-color);
+            background-color: var(--primary-color);
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='20 6 9 17 4 12'%3e%3c/polyline%3e%3c/svg%3e");
+            background-size: 12px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .validation-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        @media (max-width: 767px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+
+            .plan-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h1>Formulario de Registro</h1>
+            <p>Por favor complete todos los campos para continuar con su registro</p>
+        </div>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data" id="registro-form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="id_nombres" class="required">Nombres</label>
+                        <input type="text" name="nombres" id="id_nombres" required>
+                        {% if form.nombres.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.nombres.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="id_apellidos" class="required">Apellidos</label>
+                        <input type="text" name="apellidos" id="id_apellidos" required>
+                        {% if form.apellidos.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.apellidos.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="id_cedula" class="required">Cédula (solo números)</label>
+                        <input type="number" name="cedula" id="id_cedula" required min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        {% if form.cedula.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.cedula.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="id_correo" class="required">Correo Electrónico</label>
+                        <input type="email" name="correo" id="id_correo" required>
+                        {% if form.correo.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.correo.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_direccion" class="required">Dirección</label>
+                <input type="text" name="direccion" id="id_direccion" required>
+                {% if form.direccion.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.direccion.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="id_barrio" class="required">Barrio</label>
+                        <select name="barrio" id="id_barrio" required>
+                            <option value="" selected disabled>Seleccione un barrio</option>
+                            <option value="Centro">Centro</option>
+                            <option value="Norte">Norte</option>
+                            <option value="Sur">Sur</option>
+                            <option value="Este">Este</option>
+                            <option value="Oeste">Oeste</option>
+                            <option value="El Poblado">El Poblado</option>
+                            <option value="Laureles">Laureles</option>
+                            <option value="Envigado">Envigado</option>
+                            <option value="Belén">Belén</option>
+                            <option value="La Candelaria">La Candelaria</option>
+                            <option value="Robledo">Robledo</option>
+                            <option value="Aranjuez">Aranjuez</option>
+                            <option value="Manrique">Manrique</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        {% if form.barrio.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.barrio.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="id_celular" class="required">Número de Celular (solo números)</label>
+                        <input type="number" name="celular" id="id_celular" required min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        {% if form.celular.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.celular.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Plan Seleccionado</label>
+                <div class="plan-options">
+                    <label class="plan-card" for="plan-basico">
+                        <input type="radio" name="plan" id="plan-basico" value="Básico" class="radio-hidden" required>
+                        <div class="plan-check"></div>
+                        <h3>Plan Básico</h3>
+                        <p>Ideal para usuarios iniciales</p>
+                        <div class="price">$29.900/mes</div>
+                    </label>
+                    <label class="plan-card" for="plan-estandar">
+                        <input type="radio" name="plan" id="plan-estandar" value="Estándar" class="radio-hidden">
+                        <div class="plan-check"></div>
+                        <h3>Plan Estándar</h3>
+                        <p>Mejor relación calidad/precio</p>
+                        <div class="price">$49.900/mes</div>
+                    </label>
+                    <label class="plan-card" for="plan-premium">
+                        <input type="radio" name="plan" id="plan-premium" value="Premium" class="radio-hidden">
+                        <div class="plan-check"></div>
+                        <h3>Plan Premium</h3>
+                        <p>Todas las características premium</p>
+                        <div class="price">$69.900/mes</div>
+                    </label>
+                </div>
+                {% if form.plan.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.plan.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_horario" class="required">Preferencia de Horario</label>
+                <select name="horario" id="id_horario" required>
+                    <option value="" selected disabled>Seleccione su preferencia</option>
+                    <option value="Mañana">Mañana (8:00 AM - 12:00 PM)</option>
+                    <option value="Tarde">Tarde (2:00 PM - 6:00 PM)</option>
+                </select>
+                {% if form.horario.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.horario.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group file-group">
+                        <label for="id_foto_cedula" class="required">Foto de Cédula</label>
+                        <input type="file" name="foto_cedula" id="id_foto_cedula" required>
+                        {% if form.foto_cedula.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.foto_cedula.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <small>Formatos aceptados: JPG, PNG, PDF</small>
+                    </div>
+                </div>
+                
+                <div class="form-col">
+                    <div class="form-group file-group">
+                        <label for="id_recibo_publico" class="required">Recibo de Servicio Público</label>
+                        <input type="file" name="recibo_publico" id="id_recibo_publico" required>
+                        {% if form.recibo_publico.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.recibo_publico.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <small>Formatos aceptados: JPG, PNG, PDF</small>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-submit" id="submit-btn">Enviar Formulario</button>
+        </form>
+    </div>
+
+    <script>
+        // Validación adicional del lado del cliente
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registro-form');
+            
+            // Manejar selección de plan
+            const planCards = document.querySelectorAll('.plan-card');
+            planCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Quitar la clase selected de todas las tarjetas
+                    planCards.forEach(c => c.classList.remove('selected'));
+                    // Añadir la clase selected a la tarjeta actual
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Asegurarse de que los planes reflejen su estado seleccionado
+            const planRadios = document.querySelectorAll('input[name="plan"]');
+            planRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        const label = this.closest('.plan-card');
+                        planCards.forEach(c => c.classList.remove('selected'));
+                        label.classList.add('selected');
+                    }
+                });
+            });
+            
+            // Validar antes de enviar el formulario
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+                const requiredInputs = form.querySelectorAll('input[required], select[required]');
+                
+                requiredInputs.forEach(function(input) {
+                    if (!input.value) {
+                        isValid = false;
+                        if (input.type === 'radio') {
+                            // Para los radio buttons, resaltamos el contenedor padre
+                            const radioGroup = input.closest('.plan-options');
+                            if (radioGroup) {
+                                radioGroup.style.borderColor = 'var(--error-color)';
+                            }
+                        } else {
+                            input.style.borderColor = 'var(--error-color)';
+                        }
+                    } else {
+                        if (input.type !== 'radio') {
+                            input.style.borderColor = 'var(--border-color)';
+                        }
+                    }
+                });
+                
+                // Validación específica para el selector de barrio y horario
+                const selectors = [document.getElementById('id_barrio'), document.getElementById('id_horario')];
+                selectors.forEach(selector => {
+                    if (selector.value === "") {
+                        isValid = false;
+                        selector.style.borderColor = 'var(--error-color)';
+                    }
+                });
+                
+                // Validación para la selección de plan
+                const planSelected = Array.from(planRadios).some(radio => radio.checked);
+                if (!planSelected) {
+                    isValid = false;
+                    document.querySelector('.plan-options').style.borderColor = 'var(--error-color)';
+                } else {
+                    document.querySelector('.plan-options').style.borderColor = 'transparent';
+                }
+                
+                // Validación para los campos de archivo
+                const fileInputs = form.querySelectorAll('input[type="file"][required]');
+                fileInputs.forEach(function(fileInput) {
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        isValid = false;
+                        fileInput.parentNode.style.borderColor = 'var(--error-color)';
+                    } else {
+                        fileInput.parentNode.style.borderColor = 'var(--border-color)';
+                    }
+                });
+                
+                // Validación para los campos numéricos
+                const cedulaInput = document.getElementById('id_cedula');
+                const celularInput = document.getElementById('id_celular');
+                
+                if (!/^\d+$/.test(cedulaInput.value)) {
+                    isValid = false;
+                    cedulaInput.style.borderColor = 'var(--error-color)';
+                    alert('La cédula debe contener solo números.');
+                }
+                
+                if (!/^\d+$/.test(celularInput.value)) {
+                    isValid = false;
+                    celularInput.style.borderColor = 'var(--error-color)';
+                    alert('El número de celular debe contener solo números.');
+                }
+                
+                if (!isValid) {
+                    event.preventDefault();
+                    alert('Por favor complete todos los campos obligatorios antes de enviar el formulario.');
+                }
+            });
+            
+            // Restaurar estilos al cambiar el valor de un campo
+            const inputs = form.querySelectorAll('input:not([type="radio"]), select');
+            inputs.forEach(function(input) {
+                input.addEventListener('change', function() {
+                    if (this.value) {
+                        if (this.type === 'file') {
+                            this.parentNode.style.borderColor = 'var(--border-color)';
+                        } else {
+                            this.style.borderColor = 'var(--border-color)';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

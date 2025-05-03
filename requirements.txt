@@ -1,0 +1,6 @@
+Django>=4.2,<5.0
+psycopg2-binary>=2.9.5
+django-storages>=1.13.2
+google-cloud-storage>=2.7.0
+Pillow>=9.4.0
+python-dotenv>=1.0.0
