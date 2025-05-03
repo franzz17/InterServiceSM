@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Revisión - InterServicesSM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --primary-dark: #3367d6;
+            --error-color: #ea4335;
+            --success-color: #34a853;
+            --border-color: #dadce0;
+            --text-color: #202124;
+            --light-bg: #f8f9fa;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h1 {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: #5f6368;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #202124;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+            background-color: white;
+            appearance: auto;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+        
+        /* Estilo para campos obligatorios */
+        .required::after {
+            content: "*";
+            color: var(--error-color);
+            margin-left: 4px;
+        }
+        
+        /* Estilo para resaltar campos inválidos */
+        input:invalid,
+        select:invalid,
+        textarea:invalid {
+            border-color: var(--error-color);
+        }
+        
+        .errorlist {
+            color: var(--error-color);
+            list-style-type: none;
+            padding: 0;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 0;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 30px auto 0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .messages {
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .success {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(52, 168, 83, 0.2);
+        }
+        
+        .error {
+            background-color: rgba(234, 67, 53, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(234, 67, 53, 0.2);
+        }
+        
+        .validation-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .info-box {
+            background-color: rgba(66, 133, 244, 0.1);
+            border: 1px solid rgba(66, 133, 244, 0.2);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .info-box h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+        
+        .info-box p {
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .go-home {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .go-home:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 767px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h1>Solicitud de Revisión Técnica</h1>
+            <p>Complete el formulario para solicitar una revisión de su servicio</p>
+        </div>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form method="post" id="revision-form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="id_nombre" class="required">Nombres</label>
+                        <input type="text" name="nombre" id="id_nombre" required>
+                        {% if form.nombre.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.nombre.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="id_apellido" class="required">Apellidos</label>
+                        <input type="text" name="apellido" id="id_apellido" required>
+                        {% if form.apellido.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.apellido.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_cedula" class="required">Cédula (solo números)</label>
+                <input type="number" name="cedula" id="id_cedula" required min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                {% if form.cedula.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.cedula.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="validation-message" id="cedula-validation-message">La cédula debe contener solo números.</div>
+            </div>
+            
+            <!-- Caja de información del cliente (se mostrará cuando se encuentre un cliente) -->
+            <div class="info-box" id="cliente-info">
+                <h3>Información del Cliente</h3>
+                <div id="cliente-datos"></div>
+                <p>Por favor verifique que esta información sea correcta.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_descripcion" class="required">Descripción del problema</label>
+                <textarea name="descripcion" id="id_descripcion" rows="5" required></textarea>
+                {% if form.descripcion.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.descripcion.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn-submit" id="submit-btn">Enviar Solicitud</button>
+        </form>
+        
+        <a href="{% url 'index' %}" class="go-home">Volver a la página principal</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('revision-form');
+            const cedulaInput = document.getElementById('id_cedula');
+            const clienteInfo = document.getElementById('cliente-info');
+            const clienteDatos = document.getElementById('cliente-datos');
+            
+            // Validación de cédula
+            cedulaInput.addEventListener('input', function() {
+                const validationMessage = document.getElementById('cedula-validation-message');
+                if (this.value && !/^\d+$/.test(this.value)) {
+                    validationMessage.style.display = 'block';
+                    this.setCustomValidity('La cédula debe contener solo números');
+                } else {
+                    validationMessage.style.display = 'none';
+                    this.setCustomValidity('');
+                }
+            });
+            
+            // Consulta de información del cliente cuando se completa la cédula
+            cedulaInput.addEventListener('blur', function() {
+                if (this.value && /^\d+$/.test(this.value)) {
+                    // Hacer la consulta al API
+                    fetch(`/api/cliente/${this.value}/`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Cliente no encontrado');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Mostrar los datos del cliente
+                            clienteDatos.innerHTML = `
+                                <p><strong>Nombre:</strong> ${data.nombre} ${data.apellido}</p>
+                                <p><strong>Plan:</strong> ${data.plan_contratado}</p>
+                                <p><strong>Fecha de instalación:</strong> ${data.fecha_instalacion}</p>
+                            `;
+                            
+                            // Prellenar campos con los datos obtenidos
+                            document.getElementById('id_nombre').value = data.nombre;
+                            document.getElementById('id_apellido').value = data.apellido;
+                            
+                            // Mostrar la caja de información
+                            clienteInfo.style.display = 'block';
+                        })
+                        .catch(error => {
+                            console.log('Error:', error);
+                            clienteInfo.style.display = 'none';
+                        });
+                }
+            });
+            
+            // Validación del formulario antes de enviar
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+                const requiredInputs = form.querySelectorAll('input[required], textarea[required]');
+                
+                requiredInputs.forEach(function(input) {
+                    if (!input.value) {
+                        isValid = false;
+                        input.style.borderColor = 'var(--error-color)';
+                    } else {
+                        input.style.borderColor = 'var(--border-color)';
+                    }
+                });
+                
+                // Validación específica para cédula
+                if (!/^\d+$/.test(cedulaInput.value)) {
+                    isValid = false;
+                    cedulaInput.style.borderColor = 'var(--error-color)';
+                    document.getElementById('cedula-validation-message').style.display = 'block';
+                }
+                
+                if (!isValid) {
+                    event.preventDefault();
+                    alert('Por favor complete todos los campos obligatorios correctamente.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
